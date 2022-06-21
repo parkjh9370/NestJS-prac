@@ -12,18 +12,19 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/logging.interceptor';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { PositiveIntPipe } from 'src/common/pipes/positiveInt.pipe';
 import { CatsService } from './cats.service';
 
 @Controller('cats')
+// 요청 수행 후 보내주는 응답 형태
 @UseInterceptors(SuccessInterceptor)
+// 에러 처리 형태
 @UseFilters(HttpExceptionFilter)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Get()
-  // @UseFilters(HttpExceptionFilter)
   getAllCat() {
     // 에러처리
     // throw new HttpException('api is broken', 401);
@@ -32,7 +33,7 @@ export class CatsController {
 
   @Get(':id')
   getOneCat(@Param('id', ParseIntPipe, PositiveIntPipe) param: number) {
-    console.log(param);
+    // console.log(param);
     return 'one cat';
   }
 
